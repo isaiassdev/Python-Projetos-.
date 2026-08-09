@@ -8,51 +8,59 @@ def menu_produtos(estoque):
         print('3.Saida de Produtos')
         print('4.Fechar')
 
-def Adicionar_produto(estoque):
-   print("--- ADICIONAR PRODUTO ---")
-   print('=' * 40)
-   produto = input('Nome do produto: ')
-   quantidade = input('Quantidade do Produto: ')
+def adicionar_produto(estoque):
+    print("--- ADICIONAR PRODUTO ---")
+    print('=' * 40)
 
-   if produto in estoque:
+    produto = input('Nome do produto: ').strip().lower()
+
+    try:
+         quantidade = int(input('Quantidade do Produto: '))
+
+         if quantidade < 0: 
+            print('A quantidade não pode ser negativa')
+            return  
+    except ValueError :
+            print('Digite uma quantidade numérica válida.')
+            return
+     
+    if produto in estoque:
         print('Produto já cadastrado.')
         return
-   else:
-        print('Produto não encontrado.')
+    
      # Armazenando informacoes
      
-   estoque[produto] = {
+    estoque[produto] = {
       "quantidade": quantidade
     }
-   print(f"O {produto} foi adicionado com sucesso.")
+    print(f"O {produto} foi adicionado com sucesso.")
 
-def Buscar_produto(estoque):
+def buscar_produto(estoque):
     print('--- BUSCAR PRODUTO ---')
     print('=' * 40)
     if not estoque: 
         print("Nenhum produto encontrado.")
         return
 
-    produto = input('Digite o nome do produto: ')
+    produto = input('Digite o nome do produto: ').strip().lower()
     if produto in estoque:
         info = estoque[produto]
         print(f"\nProduto: {produto}")
         print(f"Quantidade: {info['quantidade']}")
         print('=' * 40)
     else:
-        print('Produto não encotrado.')
+        print('Produto não encontrado.')
 
-def Saida_Produtos(estoque):
+def saida_Produtos(estoque):
     print("--- SAÍDA DE PRODUTOS ---")
     print('=' * 40)
     if not estoque:
-        print('Nenhum produto econtrado')
+        print('Nenhum produto encontrado')
         return
-    
-    produto = input('Digite o nome do produto: ')
+    produto = input('Digite o nome do produto').strip().lower()
 
     if produto in estoque:
-        escolha = input('Produto encontrado. Deseja remove-lo? (SIM/NÃO:) ').strip().upper()
+        escolha = input('Produto econtrado. Deseja remove-lo? (SIM/NÃO:) ').strip().upper()
         
 
         if escolha == "SIM":
@@ -60,7 +68,8 @@ def Saida_Produtos(estoque):
             print('Produto removido com sucesso.')
         elif escolha == "NÃO":
             print('Voltando ao menu')
-            
+        else: 
+            print('Opção inválida')    
     
 def main():
     estoque = {}
@@ -70,14 +79,15 @@ def main():
         opcao = input("Esolha a opção")
 
         if opcao == '1':
-            Adicionar_produto(estoque)
+            adicionar_produto(estoque)
         elif opcao == '2':
-            Buscar_produto(estoque)
+            buscar_produto(estoque)
         elif opcao == '3':
-            Saida_Produtos(estoque)
+            saida_Produtos(estoque)
         elif opcao == '4':
             print('Fechando...')
             break
         else:
             print('Opção inválida.')
-main()
+if __name__ == "__main__":
+    main()
