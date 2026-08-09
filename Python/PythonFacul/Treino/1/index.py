@@ -57,10 +57,10 @@ def saida_Produtos(estoque):
     if not estoque:
         print('Nenhum produto encontrado')
         return
-    produto = input('Digite o nome do produto').strip().lower()
+    produto = input('Digite o nome do produto: ').strip().lower()
 
     if produto in estoque:
-        escolha = input('Produto econtrado. Deseja remove-lo? (SIM/NÃO:) ').strip().upper()
+        escolha = input('Produto econtrado. Deseja remove-lo? (SIM/NÃO: ) ').strip().upper()
         
 
         if escolha == "SIM":
@@ -76,7 +76,7 @@ def main():
 
     while True:
         menu_produtos(estoque)
-        opcao = input("Esolha a opção")
+        opcao = input("Escolha a opção: ")
 
         if opcao == '1':
             adicionar_produto(estoque)
