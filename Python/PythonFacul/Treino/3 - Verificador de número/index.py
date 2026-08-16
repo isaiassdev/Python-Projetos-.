@@ -18,7 +18,11 @@ print(resultado)
 # numero % 2 resulta em 0 para números pares.
 # Resulta em 1 para números ímpares.
 # A tupla usa esse resultado como posição: posição 0 é "par" e posição 1 é "ímpar".
+# usando o resto da divisão:
+# numero % 2 == 0 → pega posição 0 → "par"
+# numero % 2 == 1 → pega posição 1 → "ímpar"
+
 
 # outra forma utilizando dicionario
 # resultado = {0: "par", 1: "ímpar"}[numero % 2]
-# print(resultado)
+# 66print(resultado)

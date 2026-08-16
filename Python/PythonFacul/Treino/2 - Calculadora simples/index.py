@@ -1,4 +1,4 @@
-#Calculadora
+#Calculadora simples
 
 #Soma, subtração, multiplicação e divisão.
 #Usar funções.
