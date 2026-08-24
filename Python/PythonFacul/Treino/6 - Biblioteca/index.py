@@ -1,7 +1,7 @@
 # Faça um sistema de biblioteca que permita cadastrar livros, emprestar, devolver, pesquisar por título e listar livros disponíveis.
 
 def menu():
-    print("--MENU--")
+    print("-- MENU --")
     print('-' * 20)
     print('1. Cadastrar livros')
     print('2. Emprestar')
@@ -12,10 +12,10 @@ def menu():
     print('-' * 20)
 
 def cadastrar_livros(estoque):
-    print('--CADASTRAR LIVRO--')
+    print('-- CADASTRAR LIVRO --')
     print('=' * 40)
 
-    livro = input('Digite o nome do livro: ')
+    livro = input('Digite o nome do livro: ').strip().lower()
 
     try:
         quantidade = int(input('Digite a quantidade de livros: '))
@@ -48,15 +48,77 @@ def cadastrar_livros(estoque):
         else:
             print('Nenhuma alteração foi feita.')
     else:
-        estoque[livro] = {
-                    "quantidade": quantidade
-                }
-        print('Livro cadastrado com sucesso')
+        # Armazena as informações
+            estoque[livro] = {
+            "quantidade": quantidade,
+            "emprestimos": []  
+            }
+            print('Livro cadastrado com sucesso.')
       
 def emprestar(estoque):
-    pass
+    print(' -- EMPRESTAR --')
+
+    procurar = input('Digite o nome do livro: ').strip().lower()
+
+    if procurar not in estoque:
+        print('Livro não encontrado.')
+        return
+
+    if estoque[procurar]["quantidade"] <= 0:
+        print('Esse livro está sem unidades disponíveis.')
+        return
+
+    if procurar in estoque: 
+        resposta = input(f'Deseja emprestar o livro {procurar} (sim/não)?').strip().lower()
+
+        if resposta == 'sim':
+
+            nome = input('Nome: ').strip()
+            telefone = input('Telefone: ').strip()
+            dias = input('tempo de emptréstimo [1 á 10 dias]: ').strip()
+
+            estoque[procurar]["quantidade"] -= 1
+            print(f'Livro emprestado para {nome} por  {dias} dias(s).')
+
+            estoque[procurar]["emprestimos"].append({
+             "nome": nome,
+             "telefone": telefone,
+             "dias": dias
+            })
+
+        elif resposta == 'não':
+            print('nenhuma alteração realizada.')
+
+        else:
+            print('Resposta inválida.')
+
 def devolver(estoque):
-    pass
+    print('-- DEVOLVER --')
+
+    livros = input("Digite o nome do livro que desejá devolver: ").strip().lower()
+
+    if livros not in estoque: 
+        print('Livro não encontrado.')
+        return
+    
+    if not estoque[livros]["emprestimos"]:
+        print('Não há empréstimos desse livro.')
+        return
+
+    for numero, emprestimos in enumerate(estoque[livros]["emprestimos"], start=1 ):
+        print(f'{numero}. {emprestimos["nome"]}')
+
+    try:
+        escolha = int(input('Qual número de emprétimo deseja devolver ?  '))
+
+        pessoa = estoque[livros]["emprestimos"].pop(escolha - 1 )
+        estoque[livros]["quantidade"] += 1
+
+        print(f'Livro devolvido por {pessoa["nome"]}.')
+
+    except (ValueError, IndexError):
+        print('Número inválido')
+
 def pesquisar_título(estoque):
     print('-- BUSCCAR LIVRO --')
 
@@ -64,25 +126,49 @@ def pesquisar_título(estoque):
 
     if procurar not in estoque:
         print('Não há livro adicionados.')
+        return
+    
+    info = estoque[procurar]
 
-    for procurar in estoque:
+    print(f'\n Nome do livros: {procurar}')
+    print(f'Quantidade: {info['quantidade']}')
 
-        info = estoque[procurar]
-        print(f'\n Nome do livros: {procurar}')
-        print(f'Quantidade: {info['quantidade']}')
+    if info["emprestimos"]:
+        print('Empréstimos:')
 
+        for emprestimo in info["emprestimos"]:
+            print(f'- Nome: {emprestimo["nome"]}')
+            print(f'  Telefone: {emprestimo["telefone"]}')
+            print(f'  Dias: {emprestimo["dias"]}')
     else:
-        print('Livro não encotrado.')
+        print('Não há empréstimos para este livro.')
 
 def listar_disponíveis(estoque):
 
     print('-- LIVROS DISPOINÍVEIS --')
     print('=' * 30)
 
-    for livros, info in estoque.items():
-        print(f"\nNome dos livros: {livros}")
-        print(f"Quantidade: {info ["quantidade"]}")
-        print('=' * 40)
+    encontrou_livro = False
+
+    for livro, info in estoque.items():
+        quantidade = info["quantidade"]
+
+        if quantidade > 0:
+            encontrou_livro = True
+            print(f'Livro: {livro.title()}')
+            print(f'Unidades disponíveis: {quantidade}')
+
+            if info["emprestimos"]:
+                print('Emprestado para:')
+
+                for emprestimo in info["emprestimos"]:
+                    print(f'  - {emprestimo["nome"]} '
+                          f'({emprestimo["dias"]} dia(s))')
+
+            print('-' * 40)
+
+    if not encontrou_livro:
+        print('Não há livros disponíveis no momento.')
     
 def main():
     estoque = {}
