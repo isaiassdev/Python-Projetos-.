@@ -23,7 +23,7 @@ def cadastrar_livros(estoque):
         if quantidade < 0 :
             print('A quantidade não pode ser negativa.')
             return
-    except ValueError:
+    except ValueError: #int("abc")   # ValueError
             print('digite uma quantidade válida.')
             return
 
